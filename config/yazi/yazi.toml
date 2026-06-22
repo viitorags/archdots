@@ -1,0 +1,227 @@
+ratio = [1, 2, 4]
+
+[log]
+enabled = false
+
+[mgr]
+sort_dir_first = true
+sort_reverse = true
+
+[[open.prepend_rules]]
+url = "*.pdf"
+use = "pdf"
+
+[[open.prepend_rules]]
+url = "*.jpg"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.png"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.gif"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.bmp"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.svg"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.ico"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.heic"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.jpeg"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.tiff"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.webp"
+use = "img"
+
+[[open.prepend_rules]]
+url = "*.mp4"
+use = "mpv"
+
+[[open.prepend_rules]]
+url = "*.zip"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.tar"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.gz"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.bz2"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.xz"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.7z"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.rar"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.tar.gz"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.tgz"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.tar.bz2"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.tbz2"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.tar.xz"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.txz"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.lz"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.lzma"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.zst"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.zstd"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.cab"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.iso"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.apk"
+use = "ark"
+
+[[open.prepend_rules]]
+url = "*.jar"
+use = "ark"
+
+[[opener.EDITOR]]
+desc = "Run EDITOR"
+run = "nvim \"$@\""
+
+[[opener.ark]]
+for = "unix"
+orphan = true
+run = "ark \"$@\" "
+
+[[opener.edit]]
+block = true
+for = "unix"
+run = "nvim \"$@\" "
+
+[[opener.extract]]
+desc = "Extract here with ouch"
+for = "unix"
+run = "ouch d -y \"$@\" "
+
+[[opener.img]]
+for = "unix"
+orphan = true
+run = "qimgv \"$@\" "
+
+[[opener.mpv]]
+for = "unix"
+orphan = true
+run = "mpv \"$@\" "
+
+[[opener.pdf]]
+for = "unix"
+orphan = true
+run = "sioyek \"$@\" "
+
+[[plugin.prepend_fetchers]]
+group = ""
+id = "git"
+run = "git"
+url = "*"
+
+[[plugin.prepend_fetchers]]
+group = ""
+id = "git"
+run = "git"
+url = "/"
+
+[[plugin.prepend_previewers]]
+mime = "application/*zip"
+run = "ouch"
+
+[[plugin.prepend_previewers]]
+mime = "application/x-tar"
+run = "ouch"
+
+[[plugin.prepend_previewers]]
+mime = "application/x-bzip2"
+run = "ouch"
+
+[[plugin.prepend_previewers]]
+mime = "application/x-7z-compressed"
+run = "ouch"
+
+[[plugin.prepend_previewers]]
+mime = "application/x-rar"
+run = "ouch"
+
+[[plugin.prepend_previewers]]
+mime = "application/x-xz"
+run = "ouch"
+
+[[plugin.prepend_previewers]]
+mime = "application/xz"
+run = "ouch"
+
+[[plugin.prepend_previewers]]
+run = "glow"
+url = "*.md"
+
+[preview]
+image_filter = "ueberzug"
+image_quality = 90
+max_height = 760
+max_width = 1366
+tab_size = 4
+ueberzug_offset = [0, 0, 0, 0]
+ueberzug_scale = 1

@@ -1,0 +1,66 @@
+{
+	"display": {
+		"separator": " "
+	},
+	"logo": {
+		"height": 12,
+		"padding": {
+			"right": 4,
+			"top": 2
+		},
+		"source": "$(find \"$HOME/dotfiles/home/programs/fastfetch/pngs/\" -name \"*.png\" | sort -R | head -1)",
+		"type": "kitty"
+	},
+	"modules": [
+		"break",
+		"break",
+		"break",
+		{
+			"keyWidth": 10,
+			"type": "title"
+		},
+		"break",
+		{
+			"key": " ",
+			"keyColor": "33",
+			"type": "os"
+		},
+		{
+			"key": " ",
+			"keyColor": "33",
+			"type": "kernel"
+		},
+		{
+			"key": " ",
+			"keyColor": "33",
+			"type": "packages"
+		},
+		{
+			"key": " ",
+			"keyColor": "33",
+			"type": "shell"
+		},
+		{
+			"key": " ",
+			"keyColor": "33",
+			"type": "terminal"
+		},
+		{
+			"key": " ",
+			"keyColor": "33",
+			"type": "wm"
+		},
+		{
+			"key": " ",
+			"keyColor": "33",
+			"type": "uptime"
+		},
+		{
+			"key": "󰝚 ",
+			"keyColor": "33",
+			"type": "media"
+		},
+		"break",
+		"break"
+	]
+}

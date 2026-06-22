@@ -1,0 +1,77 @@
+[backdrop]
+enabled = true
+
+[bar.default]
+background_opacity = 0.8
+border = "secondary"
+border_width = 0
+capsule = true
+capsule_opacity = 0.8
+center = ["clock", "spacer_2"]
+end = [
+    "tray",
+    "media",
+    "ram",
+    "screen_recorder",
+    "notifications",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "control-center",
+]
+margin_edge = 0
+margin_ends = 0
+padding = 8
+position = "right"
+radius = 0
+scale = 1.2
+start = ["workspaces"]
+thickness = 42
+
+[location]
+auto_locate = true
+
+[osd]
+background_opacity = 0.8
+position = "top_left"
+scale = 1.0
+
+[shell]
+avatar_path = "/home/vitor/dotfiles/assets/profile.png"
+font_family = "JetBrainsMono NF"
+
+[shell.panel]
+clipboard_placement = "attached"
+control_center_placement = "attached"
+launcher_placement = "attached"
+session_placement = "attached"
+transparency_mode = "soft"
+wallpaper_placement = "attached"
+
+[theme]
+custom_palette = "Stylix"
+mode = "dark"
+source = "custom"
+
+[wallpaper]
+directory = "/home/vitor/dotfiles/assets/wallpapers"
+enabled = true
+
+[widget.control-center]
+custom_image_colorize = true
+glyph = "cat"
+
+[widget.network]
+show_label = false
+
+[widget.ram]
+show_label = false
+
+[widget.tray]
+drawer = true
+hidden = ["blueman"]
+
+[widget.workspaces]
+hide_when_empty = true
+minimal = true
