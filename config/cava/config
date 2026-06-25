@@ -1,4 +1,5 @@
 [color]
+theme = "noctalia"
 background='#282828'
 foreground='#b16286'
 gradient=1

@@ -3,25 +3,30 @@
 # Exit immediately if a command exits with a non-zero status
 set -euo pipefail
 
-# Helper functions for logging
-log_info() { echo -e "\e[34m[INFO]\e[0m $1"; }
-log_success() { echo -e "\e[32m[SUCCESS]\e[0m $1"; }
-log_warning() { echo -e "\e[33m[WARNING]\e[0m $1"; }
-log_error() {
-	echo -e "\e[31m[ERROR]\e[0m $1"
-	exit 1
-}
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "========================================="
-echo " Installing Arch Linux Official Packages "
-echo "========================================="
+# Source shared utilities
+if [ -f "$SCRIPT_DIR/utils.sh" ]; then
+	source "$SCRIPT_DIR/utils.sh"
+else
+	echo -e "\e[31m[ERROR]\e[0m utils.sh not found."
+	exit 1
+fi
+
+DRY_RUN="${DRY_RUN:-false}"
+
+log_info "Starting Arch Linux Official Packages Phase..."
 
 # Enable ParallelDownloads in /etc/pacman.conf if not already active
 if [ -f /etc/pacman.conf ]; then
 	if grep -q "^#ParallelDownloads" /etc/pacman.conf; then
-		log_info "Enabling parallel downloads in /etc/pacman.conf..."
-		sudo sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
-		log_success "Parallel downloads enabled!"
+		if [ "$DRY_RUN" = "true" ]; then
+			log_info "[DRY RUN] Would enable parallel downloads in /etc/pacman.conf"
+		else
+			log_info "Enabling parallel downloads in /etc/pacman.conf..."
+			sudo sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
+			log_success "Parallel downloads enabled!"
+		fi
 	elif grep -q "^ParallelDownloads" /etc/pacman.conf; then
 		log_success "Parallel downloads already enabled in /etc/pacman.conf."
 	else
@@ -30,8 +35,12 @@ if [ -f /etc/pacman.conf ]; then
 fi
 
 # Update package database
-log_info "Updating pacman database..."
-sudo pacman -Syu --noconfirm
+if [ "$DRY_RUN" = "true" ]; then
+	log_info "[DRY RUN] Would update pacman database: sudo pacman -Syu --noconfirm"
+else
+	log_info "Updating pacman database..."
+	sudo pacman -Syu --noconfirm
+fi
 
 # Categorized packages matching the NixOS configuration
 CORE_PACKAGES=(
@@ -61,7 +70,7 @@ CORE_PACKAGES=(
 	make
 	git-delta # equivalent to nix's delta
 	shfmt
-	lefthook
+	treesitter-cli
 )
 
 DESKTOP_PACKAGES=(
@@ -91,12 +100,15 @@ DESKTOP_PACKAGES=(
 	obsidian
 	cowsay
 	cmatrix
+	papirus-icon-theme
+	vimix-cursors
+	virt-manager
+	qemu-base
 
 	# File manager and GTK/GNOME (from home.nix / default.nix)
 	gvfs
 	nautilus
 	imagemagick
-	qimgv
 	xournalpp
 	swappy
 	wf-recorder
@@ -113,9 +125,10 @@ DESKTOP_PACKAGES=(
 	evtest
 	gamemode
 	util-linux
+	cava
 
 	# Window Managers / Desktop Environments / Display Managers
-	hyprland
+	niri
 	sddm
 	polkit-gnome
 	flatpak
@@ -124,7 +137,6 @@ DESKTOP_PACKAGES=(
 	kitty
 
 	# PDF Viewer & CLI helpers (from yazi / sioyek)
-	sioyek
 	ouch
 	glow
 )
@@ -137,7 +149,6 @@ DEV_PACKAGES=(
 	pnpm
 	php
 	composer
-	php-cs-fixer
 	clang
 	gcc
 	cmake
@@ -168,20 +179,41 @@ FONTS=(
 	ttf-dejavu
 )
 
-# Install Core packages
-log_info "Installing Core CLI packages..."
-sudo pacman -S --needed --noconfirm "${CORE_PACKAGES[@]}"
+# Helper function to install packages with fallback to individual installs if bulk fails
+install_packages_with_fallback() {
+	local category="$1"
+	shift
+	local pkgs=("${@}")
 
-# Install Desktop/GUI packages
-log_info "Installing Desktop & GUI packages..."
-sudo pacman -S --needed --noconfirm "${DESKTOP_PACKAGES[@]}"
+	log_info "Installing $category packages..."
+	if [ "$DRY_RUN" = "true" ]; then
+		log_info "[DRY RUN] Would run: sudo pacman -S --needed --noconfirm ${pkgs[*]}"
+		return 0
+	fi
 
-# Install Development packages
-log_info "Installing Development environment packages..."
-sudo pacman -S --needed --noconfirm "${DEV_PACKAGES[@]}"
+	if ! sudo pacman -S --needed --noconfirm "${pkgs[@]}"; then
+		log_warning "Failed to install some packages in bulk. Attempting to install individually to isolate errors..."
+		local failed_pkgs=()
+		for pkg in "${pkgs[@]}"; do
+			if ! sudo pacman -S --needed --noconfirm "$pkg" 2>/dev/null; then
+				log_error_no_exit "Failed to install package: $pkg"
+				failed_pkgs+=("$pkg")
+			fi
+		done
+		if [ ${#failed_pkgs[@]} -ne 0 ]; then
+			log_warning "The following packages in category '$category' could not be installed: ${failed_pkgs[*]}"
+		else
+			log_success "All $category packages installed after individual retry!"
+		fi
+	else
+		log_success "$category packages installation completed."
+	fi
+}
 
-# Install Fonts
-log_info "Installing Fonts..."
-sudo pacman -S --needed --noconfirm "${FONTS[@]}"
+# Run the installation
+install_packages_with_fallback "Core CLI" "${CORE_PACKAGES[@]}"
+install_packages_with_fallback "Desktop & GUI" "${DESKTOP_PACKAGES[@]}"
+install_packages_with_fallback "Development" "${DEV_PACKAGES[@]}"
+install_packages_with_fallback "Fonts" "${FONTS[@]}"
 
-log_success "Official packages installation completed successfully!"
+log_success "Official packages installation process completed!"

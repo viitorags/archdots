@@ -1,20 +1,21 @@
 {
-	"display": {
-		"separator": " "
-	},
 	"logo": {
 		"height": 12,
-		"padding": {
-			"right": 4,
-			"top": 2
-		},
-		"source": "$(find \"$HOME/dotfiles/home/programs/fastfetch/pngs/\" -name \"*.png\" | sort -R | head -1)",
+		// "padding": {
+		// 	"right": 4,
+		// 	"top": 2
+		// },
+		"source": "$(find \"$HOME/archdots/config/fastfetch/images/\" -name \"*.png\" | sort -R | head -1)",
 		"type": "kitty"
 	},
+	"display": {
+		"separator": "  "
+	},
 	"modules": [
-		"break",
-		"break",
-		"break",
+		{
+			"type": "custom",
+			"format": "\u001b[90m  \u001b[31m  \u001b[32m  \u001b[33m  \u001b[34m  \u001b[35m  \u001b[36m  \u001b[37m "
+		},
 		{
 			"keyWidth": 10,
 			"type": "title"
@@ -60,7 +61,9 @@
 			"keyColor": "33",
 			"type": "media"
 		},
-		"break",
-		"break"
+		{
+			"type": "custom",
+			"format": "\u001b[90m  \u001b[31m  \u001b[32m  \u001b[33m  \u001b[34m  \u001b[35m  \u001b[36m  \u001b[37m "
+		}
 	]
 }

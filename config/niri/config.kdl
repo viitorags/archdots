@@ -51,7 +51,7 @@ layout {
 	}
 
 	border {
-		width 1
+		width 2
 		active-color "#458588"
 		inactive-color "#505050"
 
@@ -87,7 +87,7 @@ hotkey-overlay {
 }
 
 environment {
-	DISPLAY ":0"
+	DISPLAY ":1"
 	"QS_ICON_THEME" "Papirus-Dark"
 	"QT_QPA_PLATFORMTHEME" "qt5ct"
 	"SSH_AUTH_SOCK" "/run/user/1000/keyring/ssh"
@@ -117,6 +117,10 @@ gestures {
 
 binds {
 	Mod+Return { spawn "kitty"; }
+	Mod+S { spawn-sh "~/.local/bin/niri-sidebar toggle-window"; }
+	Mod+Shift+S { spawn-sh "~/.local/bin/niri-sidebar toggle-visibility"; }
+	Mod+Ctrl+S { spawn-sh "~/.local/bin/niri-sidebar flip"; }
+	Mod+Alt+R { spawn-sh "~/.local/bin/niri-sidebar reorder"; }
 	Mod+A { spawn-sh "noctalia msg panel-toggle launcher"; }
 	Mod+V { spawn-sh "noctalia msg panel-toggle clipboard"; }
 	Mod+W { spawn-sh "noctalia msg panel-toggle wallpaper"; }
@@ -128,12 +132,11 @@ binds {
 	Scroll_Lock { spawn "scrolllock_keyboard"; }
 	Mod+E { spawn-sh "kitty -e yazi"; }
 	Mod+C { spawn-sh "kitty -e zsh -ic nvim"; }
-	Mod+B { spawn "zen-beta"; }
+	Mod+B { spawn "zen-browser"; }
 	Alt+Insert { screenshot-window write-to-disk=true; }
 	Ctrl+Alt+Delete { quit; }
 	Ctrl+Insert { screenshot-screen write-to-disk=true; }
 	Insert { screenshot; }
-	//Insert { spawn-sh "dms ipc call screenCaptureToolbar toggle"; }
 	Mod+1 { focus-workspace 1; }
 	Mod+2 { focus-workspace 2; }
 	Mod+3 { focus-workspace 3; }
@@ -251,7 +254,7 @@ layer-rule {
 }
 
 window-rule {
-	opacity 0.8
+	opacity 0.9
 	draw-border-with-background false
 
 	background-effect {
@@ -292,7 +295,7 @@ window-rule {
 	match app-id="chromium-browser"
 	match app-id="edge"
 	match app-id="brave-browser"
-	opacity 1.0
+	// opacity 1.0
 	open-maximized true
 }
 
@@ -437,3 +440,5 @@ window-rule {
 	match app-id="com.github.xournalpp.xournalpp"
 	opacity 1.0
 }
+
+include "noctalia.kdl"

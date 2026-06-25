@@ -1,32 +1,43 @@
-# archdots 🏔️
+# archdots
 
-Este repositório contém meus arquivos de configuração (dotfiles) para o **Arch Linux**, migrados e adaptados de uma configuração anterior baseada em **NixOS**.
-
-Ele utiliza gerenciadores de janelas modernos baseados em Wayland (**Hyprland** e **Niri**) e ferramentas otimizadas para CLI e desenvolvimento.
+A clean, modular, and optimized dotfiles repository for **Arch Linux**. This setup features modern Wayland compositors, custom CLI utilities, and robust installation/synchronization tooling.
 
 ---
 
-## 🛠️ O que está incluído?
+## Screenshots
 
-### Ambientes Gráficos (Compositores Wayland)
-* **Hyprland**: Configuração moderna em Lua (`config/hypr/hyprland.lua`).
-* **Niri**: Compositor em grid e scroll infinito (`config/niri/config.kdl`).
-
-### Ferramentas de Terminal & Apps
-* **Terminais**: Kitty.
-* **Shell**: Zsh ([.zshrc](file:///home/vitor/archdots/.zshrc)) com histórico robusto, aliases otimizados para Arch/Git e suporte completo a plugins locais.
-* **Gerenciador de Arquivos**: Yazi.
-* **Visualizador de PDFs**: Sioyek.
-* **Música na CLI**: Cava.
+Here is the system in action:
+![Preview 1](./.previews/preview1.png)
+![Preview 2](./.previews/preview2.png)
 
 ---
 
-## 🚀 Instalação e Sincronização
+## What's Included?
+
+### Display Servers & Window Managers (Wayland)
+* **Niri**: Modern scrollable-tiling window manager focused on grid layout (`config/niri/config.kdl`).
+
+### Terminal & Shell Environment
+* **Terminal Emulator**: Kitty.
+* **Shell**: Zsh ([.zshrc](file:///home/vitor/archdots/.zshrc)) with robust history, optimization aliases, and local plugin setups.
+* **Shell Framework**: Oh My Zsh (installed unattended).
+* **Plugins**: `zsh-autosuggestions` and `zsh-syntax-highlighting` loaded automatically.
+
+### CLI Utilities & Apps
+* **File Manager**: Yazi.
+* **PDF Viewer**: Sioyek.
+* **Audio Visualizer**: Cava.
+* **Development Runtimes**: Rustup (stable toolchain), Bun (baseline interpreter), Composer.
+
+---
+
+## Getting Started
 
 > [!WARNING]
-> **Não execute o script principal com `sudo` ou como `root`**. O instalador solicitará permissões administrativas (`sudo`) apenas quando necessário e rodará a compilação do AUR de forma segura com o seu usuário comum.
+> **Do not run the installer using `sudo` or as the `root` user.**
+> The installer will prompt for administrative permissions (`sudo`) only when necessary and compile AUR packages safely under your standard user.
 
-Para instalar tudo de forma interativa, execute o instalador principal na raiz do repositório:
+To run the interactive installer, clone the repository and run:
 
 ```bash
 cd ~/archdots
@@ -34,62 +45,69 @@ chmod +x scripts/*.sh
 ./scripts/install.sh
 ```
 
-### ⚡ Executando Etapas Individuais (Flags)
-Você pode utilizar flags para executar apenas partes específicas do processo de sincronização (ideal para automações ou atualizações rápidas, sem prompts de confirmação):
+### Running Individual Installation Phases
+You can selectively run specific parts of the setup using CLI flags:
 
-* **Instalar pacotes oficiais (Pacman)**:
+* **Official Packages (Pacman)**:
   ```bash
-  ./scripts/install.sh --pacman   # ou -p
+  ./scripts/install.sh --pacman   # or -p
   ```
-* **Instalar pacotes do AUR (Paru)**:
+* **AUR Packages (Paru)**:
   ```bash
-  ./scripts/install.sh --aur      # ou -a
+  ./scripts/install.sh --aur      # or -a
   ```
-* **Instalar ferramentas customizadas (Rustup, npm, composer, flatpaks)**:
+* **Custom Runtimes & Flatpaks**:
   ```bash
-  ./scripts/install.sh --custom   # ou -c
+  ./scripts/install.sh --custom   # or -c
+  ```
+* **Silent Mode (Non-interactive)**:
+  ```bash
+  ./scripts/install.sh --yes      # or -y
+  ```
+* **Dry Run (Simulation)**:
+  ```bash
+  ./scripts/install.sh --dry-run  # or -d
   ```
 
 ---
 
-## ⚙️ O que os Scripts fazem automaticamente?
+## Configuration Management & Sync
 
-1. **[01-pacman.sh](file:///home/vitor/archdots/scripts/01-pacman.sh)**:
-   * **Downloads Paralelos**: Ativa automaticamente `ParallelDownloads` no seu `/etc/pacman.conf` para acelerar os downloads.
-   * **Pacotes do Sistema**: Instala as dependências oficiais, incluindo os plugins `zsh-autosuggestions` e `zsh-syntax-highlighting`.
-2. **[02-paru.sh](file:///home/vitor/archdots/scripts/02-paru.sh)**:
-   * **Bootstrapping do Paru**: Instala o `paru-bin` do AUR caso ele não esteja presente.
-   * **Pacotes AUR**: Sincroniza e atualiza todos os pacotes adicionais do AUR (Brave, VS Code, temas, etc.).
-3. **[03-custom.sh](file:///home/vitor/archdots/scripts/03-custom.sh)**:
-   * **Instalação Inteligente**: Instala `opencode`, `@claudecode/cli` (npm), pacotes globais do Composer (`laravel/installer`, `laravel/pint`) e Flatpaks de forma **idempotente** (não faz download se já estiverem instalados).
-   * **Evita Sudo no NPM**: Detecta se o prefixo global do NPM é gravável pelo usuário comum antes de tentar usar `sudo`.
-   * **Serviços de Sistema**: Ativa e inicia serviços como `docker`, `sddm`, `avahi-daemon` e `upower`.
-   * **Inicialização do Rustup**: Configura a toolchain `stable` padrão do Rustup automaticamente.
-   * **Oh My Zsh & Shell**: Instala o Oh My Zsh em modo silencioso (`--unattended`) para não sobrescrever o seu `.zshrc` nem iniciar uma nova sessão prematuramente, e altera o shell padrão para Zsh sem interromper o andamento do script.
+You can manage your configuration files in two ways:
 
----
-
-## 📂 Aplicando as Configurações
-
-Para aplicar as configurações no seu usuário, crie links simbólicos (symlinks) apontando deste repositório para o seu diretório local.
+### Method 1: Symbolic Links (Symlinks)
+To link configurations directly from this repository to your system directories:
 
 ```bash
-# Vincular a configuração do Zsh
+# Link Zsh configuration
 ln -sf ~/archdots/.zshrc ~/.zshrc
 
-# Vincular os diretórios de configuração
+# Link window manager and tool configurations
 ln -sf ~/archdots/config/yazi ~/.config/yazi
 ln -sf ~/archdots/config/niri ~/.config/niri
-ln -sf ~/archdots/config/hypr ~/.config/hypr
 ```
+
+### Method 2: Rsync Synchronization (Recommended)
+If you prefer physical files instead of symbolic links, use the custom `rsync` scripts located in the `scripts/` folder. They are safe, quick, and automatically ignore dependencies, caches, and package directories (e.g., `.git`, `node_modules`, `vendor`, `.venv`, `target`, `.cache`).
+
+* **Sync from Local System to Repository** (Backup / Save local changes to the Git repo):
+  ```bash
+  ./scripts/sync-to-repo.sh
+  ```
+* **Sync from Repository to Local System** (Apply / Deploy configs from repo to your machine):
+  ```bash
+  ./scripts/sync-to-system.sh
+  ```
+
+#### Sync Options
+All sync scripts support these flags:
+* `-d, --dry-run` : Simulates the operation and prints what would be transferred or deleted without altering files.
+* `-n, --no-delete` : Previts deleting extra files in the destination that are not present in the source folder.
+* `-y, --yes` : Runs non-interactively (skips prompt confirmations).
 
 ---
 
-## 💻 Pós-instalação e Ajustes
-
-1. **Zsh como shell padrão**:
-   ```bash
-   chsh -s $(which zsh)
-   ```
-2. **Uso de Aliases Úteis**:
-   * O [.zshrc](file:///home/vitor/archdots/.zshrc) já vem configurado com atalhos como `upd` (para rodar `paru -Syu`) e `conf` (para entrar na pasta de dotfiles).
+## Automated Setup Steps
+1. **[01-pacman.sh](file:///home/vitor/archdots/scripts/01-pacman.sh)**: Enables `ParallelDownloads` in `/etc/pacman.conf` and installs official dependencies.
+2. **[02-paru.sh](file:///home/vitor/archdots/scripts/02-paru.sh)**: Bootstraps `paru-bin` if missing, then updates and syncs AUR packages.
+3. **[03-custom.sh](file:///home/vitor/archdots/scripts/03-custom.sh)**: Instally `opencode`, global Composer packages, Flatpaks, initializes Rustup `stable`, configures Oh My Zsh, and changes the default shell to Zsh.

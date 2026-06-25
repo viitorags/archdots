@@ -373,3 +373,7 @@ fg = "#9d0006"
 
 [which.separator_style]
 fg = "#928374"
+
+[flavor]
+dark  = "noctalia"
+light = "noctalia"
