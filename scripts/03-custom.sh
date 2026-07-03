@@ -193,7 +193,24 @@ if [ "$CURRENT_SHELL" != "/usr/bin/zsh" ] && [ "$CURRENT_SHELL" != "/bin/zsh" ];
 	fi
 fi
 
-# 9. Install custom fonts
+# 9. Install custom binaries
+BIN_SRC="$REPO_DIR/bin"
+BIN_DST="$HOME/.local/bin"
+if [ -d "$BIN_SRC" ]; then
+	log_info "Installing custom binaries to $BIN_DST..."
+	if [ "$DRY_RUN" = "true" ]; then
+		log_info "[DRY RUN] Would copy $BIN_SRC to $BIN_DST and set +x"
+	else
+		mkdir -p "$BIN_DST"
+		cp -r "$BIN_SRC/." "$BIN_DST/"
+		chmod +x "$BIN_DST"/* 2>/dev/null
+		log_success "Custom binaries installed."
+	fi
+else
+	log_warning "bin/ directory not found in repository. Skipping."
+fi
+
+# 10. Install custom fonts
 FONTS_SRC="$REPO_DIR/fonts"
 FONTS_DST="$HOME/.local/share/fonts"
 if [ -d "$FONTS_SRC" ]; then

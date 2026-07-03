@@ -145,6 +145,11 @@ if [ -d "$REPO_DIR/fonts" ]; then
 	CONFIG_ITEMS+=("fonts")
 fi
 
+# Add bin dir if it exists in the repository
+if [ -d "$REPO_DIR/bin" ]; then
+	CONFIG_ITEMS+=("bin")
+fi
+
 # Log synchronization details
 if [ "$DIRECTION" = "to-repo" ]; then
 	log_section "Syncing from Local System to Repository"
@@ -160,6 +165,8 @@ for item in "${CONFIG_ITEMS[@]}"; do
 		sys_item=".config/${item#config/}"
 	elif [[ "$item" == "fonts" ]]; then
 		sys_item=".local/share/fonts"
+	elif [[ "$item" == "bin" ]]; then
+		sys_item=".local/bin"
 	fi
 
 	if [ "$DIRECTION" = "to-repo" ]; then
@@ -207,6 +214,8 @@ for item in "${CONFIG_ITEMS[@]}"; do
 		sys_item=".config/${item#config/}"
 	elif [[ "$item" == "fonts" ]]; then
 		sys_item=".local/share/fonts"
+	elif [[ "$item" == "bin" ]]; then
+		sys_item=".local/bin"
 	fi
 
 	if [ "$DIRECTION" = "to-repo" ]; then
@@ -245,6 +254,10 @@ else
 	if [ "$DIRECTION" = "to-system" ] && [[ " ${CONFIG_ITEMS[*]} " == *" fonts "* ]]; then
 		log_info "Updating font cache..."
 		fc-cache -f && log_success "Font cache updated."
+	fi
+	# Ensure bin files are executable
+	if [ "$DIRECTION" = "to-system" ] && [[ " ${CONFIG_ITEMS[*]} " == *" bin "* ]]; then
+		chmod +x "$HOME/.local/bin"/* 2>/dev/null && log_success "bin/ permissions set."
 	fi
 	log_success "Synchronization completed successfully!"
 fi
