@@ -200,6 +200,8 @@ if [ "$DIRECTION" = "to-system" ] && [ "$DRY_RUN" = "false" ]; then
 			sys_item=".config/${item#config/}"
 		elif [[ "$item" == "fonts" ]]; then
 			sys_item=".local/share/fonts"
+		elif [[ "$item" == "bin" ]]; then
+			sys_item=".local/bin"
 		fi
 		[ -e "$HOME/$sys_item" ] && cp -r "$HOME/$sys_item" "$BACKUP_DIR/"
 	done

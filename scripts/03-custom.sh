@@ -127,7 +127,7 @@ else
 	log_warning "flatpak is not available. Skipping flatpak packages."
 fi
 
-# 5. Enable Systemd Services (matching NixOS service configurations)
+# 5. Enable Systemd Services
 log_info "Enabling and starting systemd services..."
 SERVICES=(
 	docker
