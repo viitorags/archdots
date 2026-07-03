@@ -193,7 +193,21 @@ if [ "$CURRENT_SHELL" != "/usr/bin/zsh" ] && [ "$CURRENT_SHELL" != "/bin/zsh" ];
 	fi
 fi
 
-# 9. Install custom binaries
+# 9. GTK bookmarks symlink
+GTK3_BOOKMARKS_SRC="$REPO_DIR/config/gtk-3.0/bookmarks"
+GTK3_BOOKMARKS_DST="$HOME/.config/gtk-3.0/bookmarks"
+if [ -f "$GTK3_BOOKMARKS_SRC" ]; then
+	log_info "Linking GTK bookmarks..."
+	if [ "$DRY_RUN" = "true" ]; then
+		log_info "[DRY RUN] Would run: ln -sf $GTK3_BOOKMARKS_SRC $GTK3_BOOKMARKS_DST"
+	else
+		mkdir -p "$HOME/.config/gtk-3.0"
+		ln -sf "$GTK3_BOOKMARKS_SRC" "$GTK3_BOOKMARKS_DST"
+		log_success "GTK bookmarks linked."
+	fi
+fi
+
+# 11. Install custom binaries
 BIN_SRC="$REPO_DIR/bin"
 BIN_DST="$HOME/.local/bin"
 if [ -d "$BIN_SRC" ]; then
@@ -210,7 +224,7 @@ else
 	log_warning "bin/ directory not found in repository. Skipping."
 fi
 
-# 10. Install custom fonts
+# 12. Install custom fonts
 FONTS_SRC="$REPO_DIR/fonts"
 FONTS_DST="$HOME/.local/share/fonts"
 if [ -d "$FONTS_SRC" ]; then
