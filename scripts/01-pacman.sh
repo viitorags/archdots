@@ -42,9 +42,8 @@ else
 	sudo pacman -Syu --noconfirm
 fi
 
-# Categorized packages matching the NixOS configuration
 CORE_PACKAGES=(
-	# Core CLI Tools (from corePackages)
+	# Core CLI Tools
 	tree
 	wget
 	git
@@ -58,7 +57,7 @@ CORE_PACKAGES=(
 	docker-compose
 	iptables
 
-	# Dev Utilities & Shell (from dev/default.nix / home/programs/direnv / btop)
+	# Dev Utilities & Shell
 	direnv
 	btop
 	fastfetch
@@ -73,7 +72,7 @@ CORE_PACKAGES=(
 )
 
 DESKTOP_PACKAGES=(
-	# Desktop Utilities (from desktopPackages)
+	# Desktop Utilities
 	unrar
 	ffmpeg
 	brightnessctl
@@ -102,7 +101,7 @@ DESKTOP_PACKAGES=(
 	virt-manager
 	qemu-base
 
-	# File manager and GTK/GNOME (from home.nix / default.nix)
+	# File manager and GTK/GNOME
 	gvfs
 	nautilus
 	imagemagick
@@ -168,7 +167,7 @@ DEV_PACKAGES=(
 )
 
 FONTS=(
-	# Fonts (from fonts.packages in packages.nix)
+	# Fonts
 	otf-font-awesome
 	noto-fonts
 	noto-fonts-cjk

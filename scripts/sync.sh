@@ -242,7 +242,12 @@ for item in "${CONFIG_ITEMS[@]}"; do
 	# Handle directories vs files
 	if [ -d "$SRC" ]; then
 		log_info "Syncing directory: $item"
-		rsync "${DIR_RSYNC_OPTS[@]}" "${RSYNC_EXCLUDES[@]}" "$SRC/" "$DST/" || log_warning "Failed to sync directory: $item"
+		# bin/ and fonts/ are shared system dirs — never use --delete there
+		if [[ "$item" == "bin" || "$item" == "fonts" ]]; then
+			rsync "${BASE_RSYNC_OPTS[@]}" "${RSYNC_EXCLUDES[@]}" "$SRC/" "$DST/" || log_warning "Failed to sync directory: $item"
+		else
+			rsync "${DIR_RSYNC_OPTS[@]}" "${RSYNC_EXCLUDES[@]}" "$SRC/" "$DST/" || log_warning "Failed to sync directory: $item"
+		fi
 	else
 		log_info "Syncing file: $item"
 		rsync "${BASE_RSYNC_OPTS[@]}" "${RSYNC_EXCLUDES[@]}" "$SRC" "$DST" || log_warning "Failed to sync file: $item"
