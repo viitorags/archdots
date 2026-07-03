@@ -19,7 +19,7 @@ Here is the system in action:
 
 ### Terminal & Shell Environment
 * **Terminal Emulator**: Kitty.
-* **Shell**: Zsh ([.zshrc](file:///home/vitor/archdots/.zshrc)) with robust history, optimization aliases, and local plugin setups.
+* **Shell**: Zsh ([.zshrc](./.zshrc)) with robust history, optimization aliases, and local plugin setups.
 * **Shell Framework**: Oh My Zsh (installed unattended).
 * **Plugins**: `zsh-autosuggestions` and `zsh-syntax-highlighting` loaded automatically.
 
@@ -102,12 +102,12 @@ If you prefer physical files instead of symbolic links, use the custom `rsync` s
 #### Sync Options
 All sync scripts support these flags:
 * `-d, --dry-run` : Simulates the operation and prints what would be transferred or deleted without altering files.
-* `-n, --no-delete` : Previts deleting extra files in the destination that are not present in the source folder.
+* `-n, --no-delete` : Prevents deleting extra files in the destination that are not present in the source folder.
 * `-y, --yes` : Runs non-interactively (skips prompt confirmations).
 
 ---
 
 ## Automated Setup Steps
-1. **[01-pacman.sh](file:///home/vitor/archdots/scripts/01-pacman.sh)**: Enables `ParallelDownloads` in `/etc/pacman.conf` and installs official dependencies.
-2. **[02-paru.sh](file:///home/vitor/archdots/scripts/02-paru.sh)**: Bootstraps `paru-bin` if missing, then updates and syncs AUR packages.
-3. **[03-custom.sh](file:///home/vitor/archdots/scripts/03-custom.sh)**: Instally `opencode`, global Composer packages, Flatpaks, initializes Rustup `stable`, configures Oh My Zsh, and changes the default shell to Zsh.
+1. **[01-pacman.sh](./scripts/01-pacman.sh)**: Enables `ParallelDownloads` in `/etc/pacman.conf` and installs official dependencies.
+2. **[02-paru.sh](./scripts/02-paru.sh)**: Bootstraps `paru-bin` if missing, then updates and syncs AUR packages.
+3. **[03-custom.sh](./scripts/03-custom.sh)**: Installs `opencode`, global Composer packages, Flatpaks, initializes Rustup `stable`, configures Oh My Zsh, and changes the default shell to Zsh.

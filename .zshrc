@@ -21,7 +21,6 @@ export PATH="$HOME/.cache/npm/global/bin:$PATH"
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
-mkdir -p "$(dirname "$HISTFILE")"
 
 set_opts=(
   HIST_FCNTL_LOCK HIST_IGNORE_DUPS HIST_IGNORE_SPACE SHARE_HISTORY
@@ -32,10 +31,6 @@ for opt in "${set_opts[@]}"; do
   setopt "$opt"
 done
 unset opt set_opts
-
-# --- Completion System ---
-autoload -Uz compinit
-compinit
 
 # --- Key Bindings & Shell Settings ---
 bindkey -e # Use Emacs keybindings (default)
@@ -115,7 +110,8 @@ else
 fi
 
 # Arch Linux System Aliases (replacements for nixos-rebuild)
-alias conf='cd ~/archdots'
+export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/archdots}"
+alias conf='cd "$DOTFILES_DIR"'
 alias upd='paru -Syu'
 
 # Tool configs

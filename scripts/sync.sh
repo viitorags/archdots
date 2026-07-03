@@ -118,17 +118,12 @@ RSYNC_EXCLUDES=(
 	--exclude='vendor/bundle/'
 )
 
-# Common rsync options
-# -a: archive mode (preserves symlinks, modification times, groups, owners, permissions)
-# -v: verbose
-# -h: human-readable numbers
-RSYNC_OPTS="-avh"
-if [ "$DRY_RUN" = "true" ]; then
-	RSYNC_OPTS="$RSYNC_OPTS -n"
-fi
-if [ "$DELETE_EXTRA" = "true" ]; then
-	RSYNC_OPTS="$RSYNC_OPTS --delete"
-fi
+# Common rsync options (-a: archive, -v: verbose, -h: human-readable)
+BASE_RSYNC_OPTS=(-avh)
+[ "$DRY_RUN" = "true" ] && BASE_RSYNC_OPTS+=(-n)
+
+DIR_RSYNC_OPTS=("${BASE_RSYNC_OPTS[@]}")
+[ "$DELETE_EXTRA" = "true" ] && DIR_RSYNC_OPTS+=(--delete)
 
 # Define configs tracked in the repo config folder dynamically
 CONFIG_ITEMS=()
@@ -145,6 +140,11 @@ if [ -f "$REPO_DIR/.zshrc" ]; then
 	CONFIG_ITEMS+=(".zshrc")
 fi
 
+# Add fonts dir if it exists in the repository
+if [ -d "$REPO_DIR/fonts" ]; then
+	CONFIG_ITEMS+=("fonts")
+fi
+
 # Log synchronization details
 if [ "$DIRECTION" = "to-repo" ]; then
 	log_section "Syncing from Local System to Repository"
@@ -158,6 +158,8 @@ for item in "${CONFIG_ITEMS[@]}"; do
 	sys_item="$item"
 	if [[ "$item" == config/* ]]; then
 		sys_item=".config/${item#config/}"
+	elif [[ "$item" == "fonts" ]]; then
+		sys_item=".local/share/fonts"
 	fi
 
 	if [ "$DIRECTION" = "to-repo" ]; then
@@ -180,12 +182,31 @@ if [ "$DRY_RUN" = "false" ] && [ "$INTERACTIVE" = "true" ]; then
 	fi
 fi
 
+# Backup existing configs before overwriting (to-system only)
+if [ "$DIRECTION" = "to-system" ] && [ "$DRY_RUN" = "false" ]; then
+	BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
+	mkdir -p "$BACKUP_DIR"
+	log_info "Backing up existing configs to $BACKUP_DIR..."
+	for item in "${CONFIG_ITEMS[@]}"; do
+		sys_item="$item"
+		if [[ "$item" == config/* ]]; then
+			sys_item=".config/${item#config/}"
+		elif [[ "$item" == "fonts" ]]; then
+			sys_item=".local/share/fonts"
+		fi
+		[ -e "$HOME/$sys_item" ] && cp -r "$HOME/$sys_item" "$BACKUP_DIR/"
+	done
+	log_success "Backup saved to $BACKUP_DIR"
+fi
+
 # Perform the sync
 for item in "${CONFIG_ITEMS[@]}"; do
 	# Map repository configuration path (e.g. config/niri) to system path (e.g. .config/niri)
 	sys_item="$item"
 	if [[ "$item" == config/* ]]; then
 		sys_item=".config/${item#config/}"
+	elif [[ "$item" == "fonts" ]]; then
+		sys_item=".local/share/fonts"
 	fi
 
 	if [ "$DIRECTION" = "to-repo" ]; then
@@ -210,18 +231,20 @@ for item in "${CONFIG_ITEMS[@]}"; do
 	# Handle directories vs files
 	if [ -d "$SRC" ]; then
 		log_info "Syncing directory: $item"
-		# Ensure trailing slashes for rsync directory sync to copy contents inside
-		rsync $RSYNC_OPTS "${RSYNC_EXCLUDES[@]}" "$SRC/" "$DST/" || log_warning "Failed to sync directory: $item"
+		rsync "${DIR_RSYNC_OPTS[@]}" "${RSYNC_EXCLUDES[@]}" "$SRC/" "$DST/" || log_warning "Failed to sync directory: $item"
 	else
 		log_info "Syncing file: $item"
-		# Temporarily remove --delete for single file sync (not applicable)
-		FILE_OPTS=$(echo "$RSYNC_OPTS" | sed 's/--delete//g')
-		rsync $FILE_OPTS "${RSYNC_EXCLUDES[@]}" "$SRC" "$DST" || log_warning "Failed to sync file: $item"
+		rsync "${BASE_RSYNC_OPTS[@]}" "${RSYNC_EXCLUDES[@]}" "$SRC" "$DST" || log_warning "Failed to sync file: $item"
 	fi
 done
 
 if [ "$DRY_RUN" = "true" ]; then
 	log_success "Dry run simulation complete!"
 else
+	# Rebuild font cache if fonts were synced to system
+	if [ "$DIRECTION" = "to-system" ] && [[ " ${CONFIG_ITEMS[*]} " == *" fonts "* ]]; then
+		log_info "Updating font cache..."
+		fc-cache -f && log_success "Font cache updated."
+	fi
 	log_success "Synchronization completed successfully!"
 fi

@@ -50,13 +50,14 @@ sudo_keepalive() {
     log_info "Requesting sudo permissions (needed for installation)..."
     sudo -v || log_error "Failed to acquire sudo privileges."
     
-    # Keep-alive loop: update existing sudo timestamp every 60 seconds
-    # Runs in the background and terminates when the parent process exits ($$)
     while true; do
         sudo -n true
         sleep 60
         kill -0 "$$" || exit
     done 2>/dev/null &
+
+    KEEPALIVE_PID=$!
+    trap 'kill "$KEEPALIVE_PID" 2>/dev/null' EXIT
 }
 
 # Interactive confirmation prompt

@@ -72,7 +72,7 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-log_section "Starting Dependency Sync from NixOS Config to Arch Linux"
+log_section "Starting Arch Linux Setup"
 
 if [ "$DRY_RUN" = "true" ]; then
 	log_info "DRY RUN MODE ACTIVE. No changes will be made to your system."
@@ -160,7 +160,11 @@ if [ "$RUN_CUSTOM" = true ]; then
 fi
 
 echo "=========================================================="
-log_success "Dependency Synchronization Complete!"
+log_success "Setup Complete!"
 log_info "Note: Remember to add '~/.config/composer/vendor/bin'"
 log_info "      and '~/.bun/bin' to your PATH to use them."
 echo "=========================================================="
+
+if ask_confirm "Deploy configs from repository to system now?" "y"; then
+	bash "$SCRIPT_DIR/sync.sh" to-system
+fi

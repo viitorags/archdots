@@ -2,7 +2,7 @@
 
 # Exit immediately if a command exits with a non-zero status
 # Note: we don't set -e immediately so we can handle check/installation of paru manually
-set -uo pipefail
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -71,12 +71,9 @@ else
 	log_info "Paru is already installed. Proceeding..."
 fi
 
-# Set -e for the package installation phase to halt on failures (except we handle individual fallback)
-set -e
-
-# Categorized AUR packages matching the NixOS configuration
+# Categorized AUR packages
 AUR_PACKAGES=(
-	# System & Desktop Apps (from desktopPackages / home.nix)
+	# System & Desktop Apps
 	# brave-bin
 	zen-browser-bin
 	xwayland-satellite-git
@@ -88,17 +85,18 @@ AUR_PACKAGES=(
 	#pokemon-colorscripts-git
 	waydroid
 	proton-vpn-gtk-app
-	#xcursor-vimix
+	xcursor-vimix
 	#sddm-astronaut-theme-git
 	noctalia-git
 
-	# Fonts (from fonts.packages in packages.nix)
+	# Fonts
 	# ttf-victor-mono-nerd
 	ttf-jetbrains-mono-nerd
 	ttf-material-symbols-variable-git
 	# ttf-sarasa-gothic
 
-	# Dev Tools & Shells (from dev/default.nix)
+	# Dev Tools & Shells
+	tree-sitter-cli
 	# flyctl-bin
 	# godot-mono-bin
 	# visual-studio-code-bin # Matches vscode-fhs
@@ -142,3 +140,16 @@ install_aur_packages_with_fallback() {
 install_aur_packages_with_fallback "${AUR_PACKAGES[@]}"
 
 log_success "AUR packages installation process completed!"
+
+if [ "$DRY_RUN" = "false" ]; then
+	log_info "Verifying installed AUR packages..."
+	MISSING_AUR=()
+	for pkg in "${AUR_PACKAGES[@]}"; do
+		pacman -Q "$pkg" &>/dev/null || MISSING_AUR+=("$pkg")
+	done
+	if [ ${#MISSING_AUR[@]} -gt 0 ]; then
+		log_warning "AUR packages not found after install: ${MISSING_AUR[*]}"
+	else
+		log_success "All AUR packages verified."
+	fi
+fi

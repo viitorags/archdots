@@ -70,7 +70,6 @@ CORE_PACKAGES=(
 	make
 	git-delta # equivalent to nix's delta
 	shfmt
-	treesitter-cli
 )
 
 DESKTOP_PACKAGES=(
@@ -78,7 +77,6 @@ DESKTOP_PACKAGES=(
 	unrar
 	ffmpeg
 	brightnessctl
-	qemu-desktop
 	avahi
 	upower
 	exfatprogs
@@ -101,7 +99,6 @@ DESKTOP_PACKAGES=(
 	cowsay
 	cmatrix
 	papirus-icon-theme
-	vimix-cursors
 	virt-manager
 	qemu-base
 
@@ -217,3 +214,16 @@ install_packages_with_fallback "Development" "${DEV_PACKAGES[@]}"
 install_packages_with_fallback "Fonts" "${FONTS[@]}"
 
 log_success "Official packages installation process completed!"
+
+if [ "$DRY_RUN" = "false" ]; then
+	log_info "Verifying installed packages..."
+	MISSING_PKGS=()
+	for pkg in "${CORE_PACKAGES[@]}" "${DESKTOP_PACKAGES[@]}" "${DEV_PACKAGES[@]}" "${FONTS[@]}"; do
+		pacman -Q "$pkg" &>/dev/null || MISSING_PKGS+=("$pkg")
+	done
+	if [ ${#MISSING_PKGS[@]} -gt 0 ]; then
+		log_warning "Packages not found after install: ${MISSING_PKGS[*]}"
+	else
+		log_success "All packages verified."
+	fi
+fi

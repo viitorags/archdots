@@ -16,6 +16,8 @@ DRY_RUN="${DRY_RUN:-false}"
 
 log_section "Custom Installations & Services Phase"
 
+REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 # Ensure ~/.local/bin is in the script PATH so we can run bun if just installed
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -189,6 +191,23 @@ if [ "$CURRENT_SHELL" != "/usr/bin/zsh" ] && [ "$CURRENT_SHELL" != "/bin/zsh" ];
 		sudo chsh -s /usr/bin/zsh "$USER"
 		log_success "Default shell changed to zsh (will take effect on next login)."
 	fi
+fi
+
+# 9. Install custom fonts
+FONTS_SRC="$REPO_DIR/fonts"
+FONTS_DST="$HOME/.local/share/fonts"
+if [ -d "$FONTS_SRC" ]; then
+	log_info "Installing custom fonts to $FONTS_DST..."
+	if [ "$DRY_RUN" = "true" ]; then
+		log_info "[DRY RUN] Would copy $FONTS_SRC to $FONTS_DST and run fc-cache -f"
+	else
+		mkdir -p "$FONTS_DST"
+		cp -r "$FONTS_SRC/." "$FONTS_DST/"
+		fc-cache -f
+		log_success "Custom fonts installed and font cache updated!"
+	fi
+else
+	log_warning "fonts/ directory not found in repository. Skipping."
 fi
 
 log_success "Custom installations and services setup process completed!"
