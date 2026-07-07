@@ -1,0 +1,64 @@
+window_rule = []
+swallow = []
+
+[niri]
+
+[piri.scratchpad]
+default_size = "75% 60%"
+default_margin = 50
+
+[piri.plugins]
+scratchpads = true
+sticky = true
+
+[scratchpads.term]
+direction = "fromTop"
+command = "kitty --class=float.dropterm"
+app_id = "float.dropterm"
+size = "70% 70%"
+margin = 50
+
+[piri.window_order]
+enable_event_listener = false
+default_weight = 0
+workspaces = []
+
+[piri.swallow]
+rules = []
+use_pid_matching = true
+
+[piri.workspace_rule]
+auto_width = []
+auto_tile = false
+auto_fill = false
+auto_maximize = false
+
+[piri.workspace_rule.edge_pulse]
+enabled = false
+show_left = true
+show_right = true
+width = 14
+height_ratio = 0.42
+left_gradient_start = "#68d8ff"
+left_gradient_end = "#1f4fff"
+right_gradient_start = "#ffd36a"
+right_gradient_end = "#ff7a1f"
+alpha = 0.85
+animation_enabled = false
+animation_style = "pulse"
+animation_duration = 600.0
+animation_amplitude = 0.8
+animation_repeat = 3
+
+[piri.mark]
+refocus = false
+
+[scratchpads]
+
+[empty]
+
+[singleton]
+
+[window_order]
+
+[workspace_rule]

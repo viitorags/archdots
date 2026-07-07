@@ -34,7 +34,7 @@ cursor {
 prefer-no-csd
 
 layout {
-	gaps 6
+	gaps 12
 
 	center-focused-column "never"
 
@@ -99,9 +99,10 @@ spawn-at-startup "dbus-update-activation-environment --systemd --all"
 spawn-at-startup "eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "xwayland-satellite"
-spawn-sh-at-startup "noctalia --daemon"
 spawn-at-startup "wl-paste --type text --watch cliphist store"
 spawn-at-startup "wl-paste --type image --watch cliphist store"
+spawn-sh-at-startup "noctalia --daemon"
+spawn-sh-at-startup "~/.local/bin/piri daemon"
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
@@ -117,6 +118,7 @@ gestures {
 
 binds {
 	Mod+Return { spawn "kitty"; }
+    Mod+Shift+Return { spawn-sh "~/.local/bin/piri scratchpads term toggle"; } 
 	Mod+S { spawn-sh "~/.local/bin/niri-sidebar toggle-window"; }
 	Mod+Shift+S { spawn-sh "~/.local/bin/niri-sidebar toggle-visibility"; }
 	Mod+Ctrl+S { spawn-sh "~/.local/bin/niri-sidebar flip"; }
@@ -254,7 +256,7 @@ layer-rule {
 }
 
 window-rule {
-	opacity 0.9
+	opacity 0.8
 	draw-border-with-background false
 
 	background-effect {
@@ -267,7 +269,7 @@ window-rule {
 		inactive-color "#505050"
 	}
 
-	geometry-corner-radius 5
+	geometry-corner-radius 12
 	clip-to-geometry true
 }
 
@@ -295,7 +297,6 @@ window-rule {
 	match app-id="chromium-browser"
 	match app-id="edge"
 	match app-id="brave-browser"
-	// opacity 1.0
 	open-maximized true
 }
 
@@ -438,7 +439,9 @@ window-rule {
 	match app-id="sioyek"
 	match app-id="speedynote"
 	match app-id="com.github.xournalpp.xournalpp"
+	match app-id="vwzap"
 	opacity 1.0
 }
 
 include "noctalia.kdl"
+include "animations.kdl"

@@ -2,17 +2,18 @@
 enabled = true
 
 [bar.default]
-background_opacity = 0.8
-border = "secondary"
-border_width = 0
+background_opacity = 0.7
+# border = "secondary"
+# border_width = 2
 capsule = true
-capsule_opacity = 0.8
+capsule_opacity = 0.4
 center = ["clock", "spacer_2"]
 end = [
     "tray",
-    "media",
+	"notes",
+	"wallhaven",
     "ram",
-    "screen_recorder",
+    "recorder",
     "notifications",
     "network",
     "bluetooth",
@@ -20,14 +21,32 @@ end = [
     "brightness",
     "control-center",
 ]
-margin_edge = 0
-margin_ends = 0
+# margin_edge = 12
+# margin_ends = 12
 padding = 8
-position = "right"
-radius = 0
+# position = "right"
+radius = 12
 scale = 1.2
-start = ["workspaces"]
-thickness = 42
+start = [
+    "media",
+]
+# thickness = 42
+
+
+[bar.left]
+background_opacity = 0.7
+# border = "secondary"
+# border_width = 2
+capsule = true
+capsule_opacity = 0.4
+center = ["workspaces"]
+# margin_edge = 12
+# margin_ends = 12
+# padding = 8
+position = "left"
+# radius = 12
+scale = 1.2
+# thickness = 42
 
 [location]
 auto_locate = true
@@ -38,29 +57,30 @@ position = "top_left"
 scale = 1.0
 
 [shell]
-avatar_path = "/home/vitor/dotfiles/assets/profile.png"
-font_family = "JetBrainsMono NF"
+avatar_path = "/home/vitor/archdots/assets/profile.jpg"
+font_family = "IBM Plex Mono"
 
 [shell.panel]
+transparency_mode = "soft"
 clipboard_placement = "attached"
 control_center_placement = "attached"
 launcher_placement = "attached"
 session_placement = "attached"
-transparency_mode = "soft"
 wallpaper_placement = "attached"
 
 [theme]
-custom_palette = "Stylix"
+# custom_palette = "Stylix"
 mode = "dark"
-source = "custom"
+# source = "custom"
 
 [wallpaper]
-directory = "/home/vitor/dotfiles/assets/wallpapers"
+directory = "/home/vitor/archdots/assets/wallpapers"
 enabled = true
 
 [widget.control-center]
 custom_image_colorize = true
-glyph = "cat"
+custom_image = "/usr/share/noctalia/assets/images/distros/arch.svg"
+# glyph = "cat"
 
 [widget.network]
 show_label = false
@@ -69,9 +89,9 @@ show_label = false
 show_label = false
 
 [widget.tray]
-drawer = true
+drawer = false
 hidden = ["blueman"]
 
 [widget.workspaces]
 hide_when_empty = true
-minimal = true
+minimal = false

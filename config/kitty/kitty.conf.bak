@@ -1,0 +1,45 @@
+font_family Dank Mono
+font_size 13
+
+shell_integration no-rc
+
+adjust_line_height 150%
+background_opacity 1.000000
+confirm_os_window_close 0
+cursor_blink_interval 0.5
+cursor_shape block
+cursor_stop_blinking_after 0
+tab_bar_edge top
+tab_bar_style powerline
+warn_about_missing_glyphs no
+cursor_trail 3
+cursor_trail_color none
+cursor_trail_decay 0.2 0.7
+cursor_trail_start_threshold 2
+# wayland_titlebar_color background
+window_padding_width 2 3 0 3
+
+map alt+comma set_tab_title
+map alt+f toggle_layout stack
+map alt+h neighboring_window left
+map alt+j neighboring_window down
+map alt+k neighboring_window up
+map alt+l neighboring_window right
+map alt+n next_tab
+map alt+p previous_tab
+map alt+shift+h launch --location=vsplit --cwd=current
+map alt+shift+v launch --location=hsplit --cwd=current
+map alt+shift+w close_window
+map alt+t new_tab_with_cwd
+map alt+w nth_window -1
+map ctrl+alt+h resize_window narrower 3
+map ctrl+alt+j resize_window shorter 3
+map ctrl+alt+k resize_window taller 3
+map ctrl+alt+l resize_window wider 3
+map super+n launch --type=os-window --cwd=current
+
+
+# BEGIN_KITTY_THEME
+# Noctalia
+include current-theme.conf
+# END_KITTY_THEME
