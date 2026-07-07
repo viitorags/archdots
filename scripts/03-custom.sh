@@ -138,11 +138,16 @@ SERVICES=(
 
 for SERVICE in "${SERVICES[@]}"; do
 	if [ "$DRY_RUN" = "true" ]; then
-		log_info "[DRY RUN] Would enable and start systemd service: ${SERVICE}"
+		log_info "[DRY RUN] Would enable systemd service: ${SERVICE}"
 	else
 		if systemctl list-unit-files "${SERVICE}.service" &>/dev/null; then
-			log_info "Enabling and starting ${SERVICE}..."
-			sudo systemctl enable --now "${SERVICE}"
+			if [ "$SERVICE" = "sddm" ]; then
+				log_info "Enabling ${SERVICE} (start on next boot)..."
+				sudo systemctl enable "${SERVICE}"
+			else
+				log_info "Enabling and starting ${SERVICE}..."
+				sudo systemctl enable --now "${SERVICE}"
+			fi
 		else
 			log_warning "Service ${SERVICE}.service not found."
 		fi

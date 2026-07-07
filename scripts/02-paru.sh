@@ -87,7 +87,9 @@ AUR_PACKAGES=(
 	proton-vpn-gtk-app
 	xcursor-vimix
 	#sddm-astronaut-theme-git
+	sddm-silent-theme-git
 	noctalia-git
+	ripdrag-git
 
 	# Fonts
 	# ttf-victor-mono-nerd
@@ -107,7 +109,6 @@ AUR_PACKAGES=(
 	# alejandra-bin
 	# statix-bin
 	# deadnix-bin
-	#ripdrag-bin
 )
 
 install_aur_packages_with_fallback() {

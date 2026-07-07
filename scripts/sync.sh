@@ -116,6 +116,11 @@ RSYNC_EXCLUDES=(
 	--exclude='*.tmp'
 	--exclude='.bundle/'
 	--exclude='vendor/bundle/'
+	# gtk-3.0/bookmarks is a symlink managed by scripts/03-custom.sh (points
+	# system -> repo). Directory rsync copies symlinks as symlinks (-a implies
+	# -l), so syncing it here overwrites the real repo file with a self-
+	# referential symlink and destroys its contents. Never touch it here.
+	--exclude='bookmarks'
 )
 
 # Common rsync options (-a: archive, -v: verbose, -h: human-readable)

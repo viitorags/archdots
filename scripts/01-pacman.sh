@@ -128,6 +128,7 @@ DESKTOP_PACKAGES=(
 	sddm
 	polkit-gnome
 	flatpak
+	xdg-desktop-portal-gnome
 
 	# Terminal Emulators
 	kitty
