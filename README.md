@@ -8,7 +8,7 @@ A clean, modular, and optimized dotfiles repository for **Arch Linux**. This set
 
 Here is the system in action:
 ![Preview 1](./.previews/preview1.png)
-![Preview 2](./.previews/preview2.png)
+<!-- ![Preview 2](./.previews/preview2.png) -->
 
 ---
 
@@ -111,3 +111,15 @@ All sync scripts support these flags:
 1. **[01-pacman.sh](./scripts/01-pacman.sh)**: Enables `ParallelDownloads` in `/etc/pacman.conf` and installs official dependencies.
 2. **[02-paru.sh](./scripts/02-paru.sh)**: Bootstraps `paru-bin` if missing, then updates and syncs AUR packages.
 3. **[03-custom.sh](./scripts/03-custom.sh)**: Installs `opencode`, global Composer packages, Flatpaks, initializes Rustup `stable`, configures Oh My Zsh, and changes the default shell to Zsh.
+
+---
+
+## Health Check
+
+After installing or syncing, run the doctor script to verify everything landed correctly (symlinks, binaries, fonts, dependencies, default shell):
+
+```bash
+./scripts/doctor.sh
+```
+
+It's read-only — it never modifies anything, just reports `[OK]` / `[WARN]` / `[FAIL]` per check.
